@@ -15,9 +15,26 @@ class PengajuanController extends Controller
 {
     public function index()
     {
-        $pengajuans = Pengajuan::with('lampiran', 'menara', 'user')->latest()->get();
+        // HANYA yang sudah disetujui atau ditolak
+        $pengajuans = Pengajuan::with('lampiran', 'menara', 'user')
+            ->whereIn('status', ['disetujui', 'ditolak'])
+            ->latest()
+            ->get();
+
         return view('admin.pengajuan.index', compact('pengajuans'));
     }
+
+    public function belumDisetujui()
+    {
+        // Draft dan diproses
+        $pengajuans = Pengajuan::with('lampiran', 'menara', 'user')
+            ->whereIn('status', ['draft', 'diproses'])
+            ->latest()
+            ->get();
+
+        return view('admin.pengajuan.belum', compact('pengajuans'));
+    }
+
 
     public function show(Pengajuan $pengajuan)
     {

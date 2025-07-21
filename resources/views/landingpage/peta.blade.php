@@ -3,41 +3,50 @@
 @section('title', 'Peta Menara')
 
 @section('content')
-<div class="container-fluid mt-4">
-    <div class="row">
-        <!-- Form Koordinat -->
-        <div class="col-lg-3 col-sm-12 mb-4" id="koordinat">
-            <div class="card shadow-sm p-3">
-                <h4 class="mb-3">Pilih Koordinat</h4>
-                <p>Silahkan masukan koordinat lokasi menara, lalu klik di peta atau ubah manual di bawah ini.</p>
-                <div class="form-group">
-                    <label for="Latitude">Latitude:</label>
-                    <input type="text" class="form-control" name="latitude" placeholder="contoh: -6.899253" id="Latitude">
-                </div>
-                <div class="form-group mt-3">
-                    <label for="Longitude">Longitude:</label>
-                    <input type="text" class="form-control" name="longitude" placeholder="contoh: 110.341364" id="Longitude">
-                </div>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row gy-4">
+            <!-- Form Koordinat -->
+            <div class="col-lg-4">
+                <div class="card shadow border-0 h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Pilih Koordinat</h5>
+                        <p class="text-muted small">Silahkan masukkan koordinat lokasi menara, lalu klik di peta atau ubah manual di bawah ini.</p>
 
-                <hr>
-                <div>
-                    <h5 class="mb-2">Wilayah Lokasi</h5>
-                    <p><strong>Kecamatan:</strong> <span id="namaKecamatan">–</span></p>
-                    <p><strong>Desa:</strong> <span id="namaDesa">–</span></p>
+                        <div class="mb-3">
+                            <label for="Latitude" class="form-label">Latitude:</label>
+                            <input type="text" class="form-control" name="latitude" id="Latitude" placeholder="-6.899253">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Longitude" class="form-label">Longitude:</label>
+                            <input type="text" class="form-control" name="longitude" id="Longitude" placeholder="110.341364">
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-2">
+                            <h6 class="fw-bold">Wilayah Lokasi</h6>
+                            <p class="mb-1"><strong>Kecamatan:</strong> <span id="namaKecamatan">–</span></p>
+                            <p class="mb-0"><strong>Desa:</strong> <span id="namaDesa">–</span></p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Peta -->
-        <div class="col-lg-9 col-sm-12">
-            <div class="card shadow-sm p-3">
-                <h4 class="mb-3">Peta</h4>
-                <p>Silahkan klik pada peta atau masukkan koordinat untuk melihat lokasi dan wilayah kecamatan yang dimaksud.</p>
-                <div id="map" style="width: 100%; height: 500px;"></div>
+            <!-- Peta -->
+            <div class="col-lg-8">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Peta Lokasi</h5>
+                        <p class="text-muted small">Klik pada peta atau masukkan koordinat untuk melihat lokasi dan wilayah kecamatan yang dimaksud.</p>
+                        <div id="map" style="width: 100%; height: 500px;" class="rounded shadow-sm"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 @endsection
 
 @push('scripts')
@@ -73,6 +82,7 @@
         lngInput.value = lng;
 
         let foundKecamatan = null;
+
         kecamatanLayer.eachLayer(layer => {
             if (turf.booleanPointInPolygon(
                 turf.point([e.latlng.lng, e.latlng.lat]),
@@ -82,8 +92,7 @@
             }
         });
 
-        // (jika nanti kamu pakai desaLayer, kamu bisa isi foundDesa di sini)
-        const foundDesa = null;
+        const foundDesa = null; // nanti bisa diisi dari desaLayer jika tersedia
 
         namaKecamatan.textContent = foundKecamatan || '–';
         namaDesa.textContent = foundDesa || '–';

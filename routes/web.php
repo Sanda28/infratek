@@ -4,6 +4,9 @@ use App\Http\Controllers\User\MenaraController as UserMenaraController;
 use App\Http\Controllers\Admin\MenaraController as AdminMenaraController;
 use App\Http\Controllers\User\PengajuanController;
 use App\Http\Controllers\Admin\PengajuanController as AdminPengajuanController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\RoleMiddleware;
@@ -17,8 +20,23 @@ Route::get('home/statistik', [HomeController::class, 'statistik'])->name('statis
 
 // Dashboard & Profile (Auth required)
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', function () {
+        if (auth()->user()->role == 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif (auth()->user()->role == 'user') {
+            return redirect()->route('user.dashboard');
+        } else {
+            abort(403);
+        }
+    })->name('dashboard');
 
+    // Admin dashboard
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+
+    // User dashboard
+    Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -52,9 +70,19 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->prefix('admin')->
     Route::delete('/menara/{menara}', [AdminMenaraController::class, 'destroy'])->name('menara.destroy');
 
     Route::get('pengajuan', [AdminPengajuanController::class, 'index'])->name('pengajuan.index');
+    Route::get('pengajuan/belum', [AdminPengajuanController::class, 'belumDisetujui'])->name('pengajuan.belum');
+
     Route::get('pengajuan/{pengajuan}', [AdminPengajuanController::class, 'show'])->name('pengajuan.show');
     Route::put('pengajuan/{pengajuan}/verifikasi', [AdminPengajuanController::class, 'verifikasi'])->name('pengajuan.verifikasi');
     Route::put('lampiran/{lampiran}/catatan', [AdminPengajuanController::class, 'updateCatatanLampiran'])->name('pengajuan.updateCatatanLampiran');
+
+    // Manajemen User (role: user)
+    Route::get('user', [UserController::class, 'index'])->name('user.index');
+    Route::get('user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('user', [UserController::class, 'store'])->name('user.store');
+    Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::delete('user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
 });
 
 

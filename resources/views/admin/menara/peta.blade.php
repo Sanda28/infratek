@@ -45,16 +45,27 @@
     let bounds = [];
 
     menaras.forEach(m => {
-        if (m.latitude && m.longitude) {
-            const marker = L.marker([m.latitude, m.longitude], { icon: towerIcon }).addTo(map);
-            marker.bindPopup(`
-                <strong>${m.site_name}</strong><br>
-                Site Code: ${m.site_code}<br>
-                Koordinat: (${m.latitude}, ${m.longitude})
-            `);
-            bounds.push([m.latitude, m.longitude]);
-        }
-    });
+    if (m.latitude && m.longitude) {
+        const marker = L.marker([m.latitude, m.longitude], { icon: towerIcon }).addTo(map);
+
+        const popupContent = `
+            <strong>${m.site_name}</strong><br>
+            <b>Site Code:</b> ${m.site_code}<br>
+            <b>Alamat:</b> ${m.alamat}<br>
+            <b>Koordinat:</b> (${m.latitude}, ${m.longitude})<br>
+            <b>Tinggi Menara:</b> ${m.tinggi_menara} meter<br>
+            <b>IMB:</b> ${m.imb}<br>
+            <b>Rekom:</b> ${m.rekom} ${m.tahun_rekom ? '(' + m.tahun_rekom + ')' : ''}<br>
+            <b>Status:</b> <span class="badge bg-${m.status == 'aktif' ? 'success' : 'secondary'}">${m.status}</span><br>
+            <b>Pemilik:</b> ${m.user?.nama_perusahaan || '-'}<br>
+
+        `;
+
+        marker.bindPopup(popupContent);
+        bounds.push([m.latitude, m.longitude]);
+    }
+});
+
 
     if (bounds.length > 0) {
         map.fitBounds(bounds, { padding: [50, 50] });

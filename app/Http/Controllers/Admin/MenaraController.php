@@ -66,12 +66,31 @@ class MenaraController extends Controller
     public function peta(Request $request)
     {
         $kecamatans = Kecamatan::all();
-        $selected = $request->kecamatan_id ?? $kecamatans->first()?->id;
 
+        // Jika tidak ada kecamatan sama sekali, kembalikan halaman dengan info kosong
+        if ($kecamatans->isEmpty()) {
+            return view('admin.menara.peta', [
+                'menaras' => collect(),
+                'kecamatans' => collect(),
+                'selected' => null,
+            ]);
+        }
+
+        // Ambil ID kecamatan yang dipilih, atau default ke yang pertama
+        $selected = $request->kecamatan_id;
+        $validKecamatanIds = $kecamatans->pluck('id')->toArray();
+
+        // Jika tidak valid, fallback ke kecamatan pertama
+        if (!in_array($selected, $validKecamatanIds)) {
+            $selected = $kecamatans->first()->id;
+        }
+
+        // Ambil menara di kecamatan terpilih
         $menaras = Menara::with('user')
-            ->when($selected, fn($q) => $q->where('kecamatan_id', $selected))
+            ->where('kecamatan_id', $selected)
             ->get();
 
         return view('admin.menara.peta', compact('menaras', 'kecamatans', 'selected'));
     }
+
 }

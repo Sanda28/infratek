@@ -15,7 +15,6 @@
                 <tr>
                     <th>No</th>
                     <th>Site Code</th>
-                    <th>Site Name</th>
                     <th>Kecamatan</th>
                     <th>Koordinat</th>
                     <th>Aksi</th>
@@ -26,7 +25,6 @@
                     <tr>
                         <td class="text-center">{{ $index + 1 }}</td>
                         <td>{{ $m->site_code }}</td>
-                        <td>{{ $m->site_name }}</td>
                         <td>{{ $m->kecamatan->nama ?? '-' }}</td>
                         <td>{{ $m->latitude }}, {{ $m->longitude }}</td>
                         <td class="text-center">

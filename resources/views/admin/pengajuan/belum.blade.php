@@ -1,12 +1,12 @@
 @extends('layouts.app')
-@section('title', 'Pengajuan Terverifikasi')
+@section('title', 'Pengajuan Belum Diverifikasi')
 
 @section('content')
 <div class="container mt-4">
-    <h3>Pengajuan Terverifikasi (Disetujui / Ditolak)</h3>
+    <h3>Pengajuan Belum Diverifikasi (Draft / Diproses)</h3>
 
     {{-- Tombol navigasi --}}
-    <a href="{{ route('admin.pengajuan.belum') }}" class="btn btn-outline-secondary mb-3">Lihat yang Belum Diverifikasi</a>
+    <a href="{{ route('admin.pengajuan.index') }}" class="btn btn-outline-primary mb-3">Lihat yang Sudah Diverifikasi</a>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
