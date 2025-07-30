@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container px-3 px-md-5">
     <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-      Infratek Bogor
+      Infratek
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarLanding" aria-controls="navbarLanding" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
